@@ -59,4 +59,18 @@ const updateCommentNum = (id, increment = 1) => {
     });
 };
 
+// 게시글 삭제
+const deletePosting = (id) => {
+    return new Promise((resolve, reject) => {
+        db.query(
+            'DELETE FROM posting WHERE id = ?',
+            [id],
+            (err, result) => {
+                if (err) return reject(err);
+                resolve(result);  // 삭제된 행의 수를 반환
+            }
+        );
+    });
+};
+
 module.exports = { createPosting, getAllPostings, getPostingById, updateGood, updateCommentNum };

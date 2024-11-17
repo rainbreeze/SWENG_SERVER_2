@@ -13,6 +13,9 @@ postingRouter.get('/postings', postingController.getPostings);
 // 특정 게시글 조회
 postingRouter.get('/postings/:id', postingController.getPostingById);
 
+// 게시글 삭제
+postingRouter.delete('/postings/:id', postingController.deletePosting);  // 삭제 기능 추가
+
 // 좋아요 수 증가
 postingRouter.post('/postings/:id/like', postingController.likePosting);
 

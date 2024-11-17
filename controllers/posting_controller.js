@@ -72,4 +72,22 @@ const addCommentToPosting = async (req, res) => {
     }
 };
 
+// 게시글 삭제
+const deletePosting = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const result = await postingModel.deletePosting(id);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: '게시글을 찾을 수 없습니다.' });
+        }
+
+        res.status(200).json({ message: '게시글이 삭제되었습니다.' });
+    } catch (err) {
+        console.error('게시글 삭제 오류:', err);
+        res.status(500).json({ message: '서버 오류' });
+    }
+};
+
 module.exports = { createPosting, getPostings, getPostingById, likePosting, addCommentToPosting };
