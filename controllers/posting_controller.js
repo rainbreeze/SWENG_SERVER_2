@@ -1,9 +1,6 @@
 // controllers/posting_controller.js
 const postingModel = require('../models/posting');  // 모델 임포트
 
-// 유효한 type 값을 설정
-const validTypes = ['SCRUM', 'XP', 'CMM', 'DEVOPS'];
-
 // 게시글 추가
 const createPosting = async (req, res) => {
     const { author, title, link, type } = req.body;
@@ -11,10 +8,6 @@ const createPosting = async (req, res) => {
     // 유효성 검사
     if (!author || !title || !type) {
         return res.status(400).json({ message: '저자, 제목, 유형은 필수 항목입니다.' });
-    }
-
-    if (!validTypes.includes(type)) {
-        return res.status(400).json({ message: '유효하지 않은 유형입니다.' });
     }
 
     try {
