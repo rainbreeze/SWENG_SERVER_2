@@ -31,11 +31,13 @@ const getCommentsByPostingId = async (req, res) => {
     try {
         const comments = await commentModel.getCommentsByPostingId(postId);
 
+        // 댓글이 없을 경우 빈 배열을 반환
         if (comments.length === 0) {
-            return res.status(404).json({ message: '댓글이 없습니다.' });
+            return res.status(200).json({ comments: [] });
         }
 
-        res.status(200).json(comments);
+        // 댓글이 있으면 댓글 목록 반환
+        res.status(200).json({ comments });
     } catch (err) {
         console.error('댓글 조회 오류:', err);
         res.status(500).json({ message: '서버 오류' });
