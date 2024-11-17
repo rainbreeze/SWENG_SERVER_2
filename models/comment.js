@@ -45,12 +45,22 @@ const updateCommentCount = (postId) => {
 // 댓글 삭제
 const deleteComment = (postId, commentId) => {
     return new Promise((resolve, reject) => {
+        // 댓글 삭제
         db.query(
             'DELETE FROM comments WHERE posting_id = ? AND id = ?',
             [postId, commentId],
             (err, result) => {
                 if (err) return reject(err);
-                resolve(result);
+
+                // 댓글 삭제 후 댓글 수 감소
+                db.query(
+                    'UPDATE posting SET comment_num = comment_num - 1 WHERE id = ?',
+                    [postId],
+                    (err, result) => {
+                        if (err) return reject(err);
+                        resolve(result);
+                    }
+                );
             }
         );
     });
