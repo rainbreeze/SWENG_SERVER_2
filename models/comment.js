@@ -42,4 +42,18 @@ const updateCommentCount = (postId) => {
     });
 };
 
-module.exports = { addComment, getCommentsByPostingId, updateCommentCount };
+// 댓글 삭제
+const deleteComment = (postId, commentId) => {
+    return new Promise((resolve, reject) => {
+        db.query(
+            'DELETE FROM comments WHERE posting_id = ? AND id = ?',
+            [postId, commentId],
+            (err, result) => {
+                if (err) return reject(err);
+                resolve(result);
+            }
+        );
+    });
+};
+
+module.exports = { addComment, getCommentsByPostingId, updateCommentCount, deleteComment };

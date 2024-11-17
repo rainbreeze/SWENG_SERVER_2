@@ -1,4 +1,3 @@
-// routes/posting_router.js
 const express = require('express');
 const postingController = require('../controllers/posting_controller');  // 컨트롤러 임포트
 

@@ -9,4 +9,7 @@ commentRouter.post('/comments/:postId', commentController.addComment);
 // 특정 게시글의 댓글 조회
 commentRouter.get('/comments/:postId', commentController.getCommentsByPostingId);
 
+// 특정 게시글의 댓글 삭제
+commentRouter.delete('/comments/:postId/:commentId', commentController.deleteComment);
+
 module.exports = commentRouter;
