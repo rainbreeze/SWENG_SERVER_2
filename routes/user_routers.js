@@ -1,6 +1,6 @@
 // routes.js
 const express = require('express');
-const db = require('./database'); // DB 연결 객체 임포트
+const db = require('../db/database'); // DB 연결 객체 임포트
 
 const userRouter = express.Router();  // router -> userRouter로 이름 변경
 
