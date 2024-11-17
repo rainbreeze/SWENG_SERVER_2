@@ -1,28 +1,18 @@
+// server.js
 const express = require('express');
-const mysql = require('mysql2');
 const dotenv = require('dotenv');
 const cors = require('cors'); // CORS 모듈 추가
+const db = require('./database');  // DB 연결 객체 임포트
+
 const app = express();
 const port = 3000;
 
 // .env 파일 로드
 dotenv.config();
 
-// MySQL 연결 설정
-const db = mysql.createConnection(process.env.MYSQL_PUBLIC_URL);
-
-// 데이터베이스 연결 확인
-db.connect((err) => {
-    if (err) {
-        console.error('DB 연결 실패:', err);
-        return;
-    }
-    console.log('DB 연결 성공');
-});
-
 // Express 서버 설정
-app.use(express.json()); // 요청 본문을 JSON으로 파싱\
-app.use(cors());
+app.use(express.json());  // 요청 본문을 JSON으로 파싱
+app.use(cors());  // CORS 설정
 
 // 회원가입 라우트
 app.post('/register', (req, res) => {
