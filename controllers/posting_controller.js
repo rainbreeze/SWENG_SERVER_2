@@ -72,11 +72,25 @@ const addCommentToPosting = async (req, res) => {
     }
 };
 
-// 게시글 삭제
 const deletePosting = async (req, res) => {
     const { id } = req.params;
+    const { username } = req.body;  // 클라이언트에서 보내온 username을 받음
 
     try {
+        // 게시글 정보 가져오기
+        const posting = await postingModel.getPostingById(id);
+        if (posting.length === 0) {
+            return res.status(404).json({ message: '게시글을 찾을 수 없습니다.' });
+        }
+
+        const author = posting[0].author;  // 게시글의 작성자
+
+        // 현재 사용자와 게시글 작성자 비교
+        if (username !== author) {
+            return res.status(403).json({ message: '게시글을 삭제할 권한이 없습니다.' });
+        }
+
+        // 게시글 삭제
         const result = await postingModel.deletePosting(id);
 
         if (result.affectedRows === 0) {
@@ -89,5 +103,6 @@ const deletePosting = async (req, res) => {
         res.status(500).json({ message: '서버 오류' });
     }
 };
+
 
 module.exports = { createPosting, getPostings, getPostingById, likePosting, addCommentToPosting, deletePosting };
