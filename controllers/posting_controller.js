@@ -90,4 +90,4 @@ const deletePosting = async (req, res) => {
     }
 };
 
-module.exports = { createPosting, getPostings, getPostingById, likePosting, addCommentToPosting };
+module.exports = { createPosting, getPostings, getPostingById, likePosting, addCommentToPosting, deletePosting };

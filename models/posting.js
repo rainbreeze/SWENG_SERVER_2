@@ -73,4 +73,11 @@ const deletePosting = (id) => {
     });
 };
 
-module.exports = { createPosting, getAllPostings, getPostingById, updateGood, updateCommentNum };
+module.exports = { 
+    createPosting, 
+    getAllPostings, 
+    getPostingById, 
+    updateGood, 
+    updateCommentNum, 
+    deletePosting  // 여기에 deletePosting 추가
+};
