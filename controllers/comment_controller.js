@@ -30,6 +30,7 @@ const getCommentsByPostingId = async (req, res) => {
 
     try {
         const comments = await commentModel.getCommentsByPostingId(postId);
+        console.log('댓글 목록:', comments); // 댓글 목록을 로그로 출력
 
         // 댓글이 없을 경우 빈 배열을 반환
         if (comments.length === 0) {
@@ -43,6 +44,7 @@ const getCommentsByPostingId = async (req, res) => {
         res.status(500).json({ message: '서버 오류' });
     }
 };
+
 
 // 댓글 삭제
 const deleteComment = async (req, res) => {
