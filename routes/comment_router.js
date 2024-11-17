@@ -1,16 +1,12 @@
-// routes/comment_router.js
 const express = require('express');
-const commentController = require('../controllers/comment_controller');  // 댓글 컨트롤러 임포트
+const commentController = require('../controllers/comment_controller');  // 댓글 관련 컨트롤러
 
-const commentRouter = express.Router();  // 라우터 객체 생성
+const commentRouter = express.Router();
 
-// 댓글 추가
-commentRouter.post('/postings/:id/comments', commentController.addCommentToPosting);
+// 특정 게시글에 댓글 추가
+commentRouter.post('/comments/:postId', commentController.addComment);
 
 // 특정 게시글의 댓글 조회
-commentRouter.get('/postings/:id/comments', commentController.getCommentsForPosting);
-
-// 댓글 삭제
-commentRouter.delete('/comments/:commentId', commentController.deleteComment);
+commentRouter.get('/comments/:postId', commentController.getCommentsByPostingId);
 
 module.exports = commentRouter;
