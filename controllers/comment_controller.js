@@ -45,7 +45,6 @@ const getCommentsByPostingId = async (req, res) => {
     }
 };
 
-
 // 댓글 삭제
 const deleteComment = async (req, res) => {
     const { postId, commentId } = req.params;

@@ -32,8 +32,8 @@ const getCommentsByPostingId = (postingId) => {
 const updateCommentCount = (postId) => {
     return new Promise((resolve, reject) => {
         db.query(
-            'UPDATE posting SET comment_num = comment_num + 1 WHERE id = ?',
-            [postId],
+            'UPDATE posting SET comment_num = (SELECT COUNT(*) FROM comments WHERE posting_id = ?) WHERE id = ?',
+            [postId, postId],  // COUNT(*)를 이용해 정확한 댓글 수를 계산
             (err, result) => {
                 if (err) return reject(err);
                 resolve(result);
@@ -52,15 +52,10 @@ const deleteComment = (postId, commentId) => {
             (err, result) => {
                 if (err) return reject(err);
 
-                // 댓글 삭제 후 댓글 수 감소
-                db.query(
-                    'UPDATE posting SET comment_num = comment_num - 1 WHERE id = ?',
-                    [postId],
-                    (err, result) => {
-                        if (err) return reject(err);
-                        resolve(result);
-                    }
-                );
+                // 댓글 삭제 후 댓글 수 업데이트
+                updateCommentCount(postId)
+                    .then(() => resolve(result))
+                    .catch(err => reject(err));
             }
         );
     });
