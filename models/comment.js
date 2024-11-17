@@ -43,4 +43,18 @@ const deleteComment = (commentId) => {
     });
 };
 
-module.exports = { addComment, getCommentsByPostingId, deleteComment };
+// 댓글 조회 (댓글 하나를 찾을 때)
+const getCommentById = (commentId) => {
+    return new Promise((resolve, reject) => {
+        db.query(
+            'SELECT * FROM comments WHERE id = ?',
+            [commentId],
+            (err, result) => {
+                if (err) return reject(err);
+                resolve(result);
+            }
+        );
+    });
+};
+
+module.exports = { addComment, getCommentsByPostingId, deleteComment, getCommentById };

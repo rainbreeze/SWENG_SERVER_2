@@ -1,5 +1,5 @@
 // controllers/comment_controller.js
-const commentModel = require('../models/comment');  // 모델 임포트
+const commentModel = require('../models/comment');  // 댓글 모델 임포트
 const postingModel = require('../models/posting');  // 게시글 모델 임포트
 
 // 댓글 추가
@@ -13,9 +13,12 @@ const addCommentToPosting = async (req, res) => {
     }
 
     try {
+        // 댓글 추가
         await commentModel.addComment(id, commentor, comment);
-        // 댓글 수 증가
+
+        // 게시글의 댓글 수 증가
         await postingModel.updateCommentNum(id);
+
         res.status(201).json({ message: '댓글이 성공적으로 추가되었습니다.' });
     } catch (err) {
         console.error('댓글 추가 오류:', err);
@@ -37,19 +40,18 @@ const getCommentsForPosting = async (req, res) => {
 };
 
 // 댓글 삭제
-const deleteCommentFromPosting = async (req, res) => {
+const deleteComment = async (req, res) => {
     const { commentId } = req.params;  // 댓글 ID
     const { commentor } = req.body;    // 댓글 작성자
 
     try {
         // 댓글 정보 가져오기
-        const comments = await commentModel.getCommentsByPostingId(commentId);
-        if (comments.length === 0) {
+        const comment = await commentModel.getCommentById(commentId);
+        if (comment.length === 0) {
             return res.status(404).json({ message: '댓글을 찾을 수 없습니다.' });
         }
 
-        const comment = comments[0];
-        const commentAuthor = comment.commentor;
+        const commentAuthor = comment[0].commentor;
 
         // 작성자 확인
         if (commentor !== commentAuthor) {
@@ -58,6 +60,10 @@ const deleteCommentFromPosting = async (req, res) => {
 
         // 댓글 삭제
         await commentModel.deleteComment(commentId);
+
+        // 게시글의 댓글 수 감소
+        await postingModel.updateCommentNum(comment[0].posting_id, -1); // 댓글 수 감소
+
         res.status(200).json({ message: '댓글이 삭제되었습니다.' });
     } catch (err) {
         console.error('댓글 삭제 오류:', err);
@@ -65,4 +71,8 @@ const deleteCommentFromPosting = async (req, res) => {
     }
 };
 
-module.exports = { addCommentToPosting, getCommentsForPosting, deleteCommentFromPosting };
+module.exports = { 
+    addCommentToPosting,
+    getCommentsForPosting,
+    deleteComment
+};
