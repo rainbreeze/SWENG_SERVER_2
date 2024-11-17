@@ -2,11 +2,11 @@
 const db = require('../db/database');  // DB 연결 객체 임포트
 
 // 새 게시글 추가
-const createPosting = (author, title, link = null) => {
+const createPosting = (author, title, link = null, type) => {
     return new Promise((resolve, reject) => {
         db.query(
-            'INSERT INTO posting (author, title, link, good, comment_num) VALUES (?, ?, ?, 0, 0)',
-            [author, title, link],
+            'INSERT INTO posting (author, title, link, good, comment_num, type) VALUES (?, ?, ?, 0, 0, ?)',  // type 추가
+            [author, title, link, type],
             (err, result) => {
                 if (err) return reject(err);
                 resolve(result);
