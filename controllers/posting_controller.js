@@ -1,5 +1,6 @@
 // controllers/posting_controller.js
-const postingModel = require('../models/posting');  // 모델 임포트
+const postingModel = require('../models/posting');  // 게시글 관련 모델
+const commentModel = require('../models/comment');  // 댓글 관련 모델 임포트
 
 // 게시글 추가
 const createPosting = async (req, res) => {
@@ -72,6 +73,7 @@ const addCommentToPosting = async (req, res) => {
     }
 };
 
+// 게시글 삭제
 const deletePosting = async (req, res) => {
     const { id } = req.params;
     const { username } = req.body;  // 클라이언트에서 보내온 username을 받음
@@ -90,6 +92,9 @@ const deletePosting = async (req, res) => {
             return res.status(403).json({ message: '게시글을 삭제할 권한이 없습니다.' });
         }
 
+        // 댓글 삭제
+        await commentModel.deleteCommentsByPostingId(id);  // 게시글에 달린 모든 댓글 삭제
+
         // 게시글 삭제
         const result = await postingModel.deletePosting(id);
 
@@ -97,12 +102,11 @@ const deletePosting = async (req, res) => {
             return res.status(404).json({ message: '게시글을 찾을 수 없습니다.' });
         }
 
-        res.status(200).json({ message: '게시글이 삭제되었습니다.' });
+        res.status(200).json({ message: '게시글과 관련된 댓글이 모두 삭제되었습니다.' });
     } catch (err) {
         console.error('게시글 삭제 오류:', err);
         res.status(500).json({ message: '서버 오류' });
     }
 };
-
 
 module.exports = { createPosting, getPostings, getPostingById, likePosting, addCommentToPosting, deletePosting };

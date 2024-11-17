@@ -61,4 +61,19 @@ const deleteComment = (postId, commentId) => {
     });
 };
 
-module.exports = { addComment, getCommentsByPostingId, updateCommentCount, deleteComment };
+// 댓글 삭제 함수 (댓글 모델)
+const deleteCommentsByPostingId = (postingId) => {
+    return new Promise((resolve, reject) => {
+        db.query(
+            'DELETE FROM comments WHERE posting_id = ?',
+            [postingId],
+            (err, result) => {
+                if (err) return reject(err);
+                resolve(result);
+            }
+        );
+    });
+};
+
+
+module.exports = { addComment, getCommentsByPostingId, updateCommentCount, deleteComment, deleteCommentsByPostingId};
