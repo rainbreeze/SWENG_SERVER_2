@@ -1,10 +1,8 @@
 const CommentModel = require('../models/comment'); // 댓글 모델 임포트
-const PostingController = require('./posting_controller'); // 게시글 컨트롤러 임포트
 
 class CommentController {
     constructor(db) {
         this.commentModel = new CommentModel(db); // DB 객체를 주입하여 댓글 모델 인스턴스 생성
-        this.postingController = new PostingController(db); // PostingController 인스턴스
     }
 
     // 댓글 추가
@@ -22,7 +20,7 @@ class CommentController {
             await this.commentModel.addComment(postId, commentor, comment);
             
             // 댓글 추가 후, 게시글의 댓글 수를 업데이트
-            await this.postingController.addCommentToPosting(postId);  // 댓글 수 증가
+            await this.updateCommentCount(postId);  // 댓글 수 증가
 
             res.status(201).json({ message: '댓글이 성공적으로 추가되었습니다.' });
         } catch (err) {
@@ -64,7 +62,7 @@ class CommentController {
             }
 
             // 게시글의 댓글 수 업데이트
-            await this.commentModel.updateCommentCount(postId);
+            await this.updateCommentCount(postId);
 
             res.status(200).json({ message: '댓글이 성공적으로 삭제되었습니다.' });
         } catch (err) {
@@ -73,20 +71,32 @@ class CommentController {
         }
     }
 
-        // 게시글의 모든 댓글 삭제
-        async deleteCommentsByPostingId(req, res) {
-            const { postingId } = req.params;
-            console.log('댓글 삭제 시작:', postingId);  // 디버깅 로그
-    
-            try {
-                const result = await this.commentModel.deleteCommentsByPostingId(postingId);
-                console.log('댓글 삭제 결과:', result);  // 댓글 삭제 결과 확인
-                res.status(200).json({ message: '댓글이 모두 삭제되었습니다.' });
-            } catch (err) {
-                console.error('댓글 삭제 오류:', err);
-                res.status(500).json({ message: '댓글 삭제 오류' });
-            }
+    // 게시글의 댓글 수 업데이트
+    async updateCommentCount(postId) {
+        try {
+            // 댓글 수를 카운트해서 업데이트하는 쿼리 실행
+            const commentCount = await this.commentModel.countComments(postId);
+            await this.commentModel.updateCommentCount(postId, commentCount);
+        } catch (err) {
+            console.error('댓글 수 업데이트 오류:', err);
+            throw new Error('댓글 수 업데이트 오류');
         }
+    }
+
+    // 게시글의 모든 댓글 삭제
+    async deleteCommentsByPostingId(req, res) {
+        const { postingId } = req.params;
+        console.log('댓글 삭제 시작:', postingId);  // 디버깅 로그
+    
+        try {
+            const result = await this.commentModel.deleteCommentsByPostingId(postingId);
+            console.log('댓글 삭제 결과:', result);  // 댓글 삭제 결과 확인
+            res.status(200).json({ message: '댓글이 모두 삭제되었습니다.' });
+        } catch (err) {
+            console.error('댓글 삭제 오류:', err);
+            res.status(500).json({ message: '댓글 삭제 오류' });
+        }
+    }
 }
 
 module.exports = CommentController;

@@ -1,4 +1,5 @@
 // controllers/posting_controller.js
+
 const Posting = require('../models/posting'); // 게시글 모델 임포트
 const CommentController = require('./comment_controller'); // 댓글 컨트롤러 임포트
 
@@ -52,32 +53,6 @@ class PostingController {
         }
     }
 
-    // 좋아요 수 증가
-    async likePosting(req, res) {
-        const { id } = req.params;
-
-        try {
-            await this.postingModel.updateGood(id);
-            res.status(200).json({ message: '좋아요 수가 증가했습니다.' });
-        } catch (err) {
-            console.error('좋아요 증가 오류:', err);
-            res.status(500).json({ message: '서버 오류' });
-        }
-    }
-
-    // 댓글 수 증가
-    async addCommentToPosting(req, res) {
-        const { id } = req.params;
-
-        try {
-            await this.postingModel.updateCommentNum(id);
-            res.status(200).json({ message: '댓글 수가 증가했습니다.' });
-        } catch (err) {
-            console.error('댓글 수 증가 오류:', err);
-            res.status(500).json({ message: '서버 오류' });
-        }
-    }
-
     // 게시글 삭제
     async deletePosting(req, res) {
         const { id } = req.params;
@@ -116,7 +91,6 @@ class PostingController {
             res.status(500).json({ message: '서버 오류' });
         }
     }
-
 }
 
 module.exports = PostingController;
