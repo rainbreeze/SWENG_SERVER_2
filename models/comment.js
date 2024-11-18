@@ -32,7 +32,7 @@ class Comment {
     async countComments(postId) {
         const sql = 'SELECT COUNT(*) AS count FROM comments WHERE posting_id = ?';
         const params = [postId];
-    
+
         try {
             const result = await this.db.query(sql, params);
             return result[0].count;  // 첫 번째 결과의 count 값을 반환
@@ -45,7 +45,7 @@ class Comment {
     async updateCommentCount(postId, commentCount) {
         const sql = 'UPDATE posting SET comment_num = ? WHERE id = ?';
         const params = [commentCount, postId];
-    
+
         try {
             const result = await this.db.query(sql, params);
             return result;
@@ -53,33 +53,34 @@ class Comment {
             throw new Error('댓글 수 업데이트 오류: ' + err);
         }
     }
-    
-// controllers/comment_controller.js
-async deleteComment(req, res) {
-    const { postId, commentId } = req.params;
 
-    try {
-        // 댓글 삭제
-        const result = await this.commentModel.deleteComment(postId, commentId);
+    // controllers/comment_controller.js
+    async deleteComment(req, res) {
+        const { postId, commentId } = req.params;
 
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ message: '해당 댓글을 찾을 수 없습니다.' });
+        try {
+            // 댓글 삭제
+            const result = await this.commentModel.deleteComment(postId, commentId);
+            console.log('req.params:', req.params);  // 디버깅을 위한 출력
+            
+            if (result.affectedRows === 0) {
+                return res.status(404).json({ message: '해당 댓글을 찾을 수 없습니다.' });
+            }
+
+            // 댓글 수 업데이트
+            const updateResult = await this.updateCommentCount(postId);
+
+            if (updateResult.affectedRows === 0) {
+                console.error('댓글 수 업데이트 실패');
+                return res.status(500).json({ message: '댓글 수 업데이트 실패' });
+            }
+
+            res.status(200).json({ message: '댓글이 성공적으로 삭제되었습니다.' });
+        } catch (err) {
+            console.error('댓글 삭제 오류:', err);
+            res.status(500).json({ message: '서버 오류' });
         }
-
-        // 댓글 수 업데이트
-        const updateResult = await this.updateCommentCount(postId);
-
-        if (updateResult.affectedRows === 0) {
-            console.error('댓글 수 업데이트 실패');
-            return res.status(500).json({ message: '댓글 수 업데이트 실패' });
-        }
-
-        res.status(200).json({ message: '댓글이 성공적으로 삭제되었습니다.' });
-    } catch (err) {
-        console.error('댓글 삭제 오류:', err);
-        res.status(500).json({ message: '서버 오류' });
     }
-}
 
 
     // 게시글의 모든 댓글 삭제
