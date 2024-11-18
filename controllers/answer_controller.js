@@ -29,7 +29,7 @@ class AnswerController {
 
         try {
             const answers = await this.answerModel.getAnswersByQuestionId(question_id);
-            
+
             // 답변이 없을 경우 빈 배열 반환
             res.status(200).json({ answers });
         } catch (err) {
@@ -49,7 +49,7 @@ class AnswerController {
         try {
             // 답변 삭제
             const result = await this.answerModel.deleteAnswer(answer_id);
-            
+
             if (result.affectedRows === 0) {
                 return res.status(404).json({ message: '답변을 찾을 수 없습니다.' });
             }
@@ -59,6 +59,13 @@ class AnswerController {
             console.error('DB 오류:', err);
             res.status(500).json({ message: '서버 오류' });
         }
+    }
+
+    // 특정 질문에 대한 모든 답변 삭제
+    async deleteAnswersByQuestionId(question_id) {
+        const query = 'DELETE FROM Answers WHERE question_id = ?';
+        const result = await this.db.query(query, [question_id]);
+        return result;
     }
 }
 

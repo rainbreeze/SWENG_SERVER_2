@@ -14,6 +14,7 @@ class QuestionRouter {
         this.router.post('/questions', (req, res) => this.questionController.createQuestion(req, res)); // 질문 추가
         this.router.get('/questions', (req, res) => this.questionController.getAllQuestions(req, res)); // 모든 질문 조회
         this.router.get('/questions/:id', (req, res) => this.questionController.getQuestionById(req, res)); // 특정 질문 조회
+        this.router.delete('/questions/:id', (req, res) => questionController.deleteQuestion(req, res));  // 질문 삭제
     }
 
     getRouter() {
