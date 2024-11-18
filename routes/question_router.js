@@ -1,4 +1,3 @@
-// routes/question_router.js
 const express = require('express');
 const QuestionController = require('../controllers/question_controller'); // QuestionController 임포트
 

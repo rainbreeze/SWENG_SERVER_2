@@ -1,4 +1,3 @@
-// controllers/question_controller.js
 const Question = require('../models/question'); // Question 모델 임포트
 
 class QuestionController {
@@ -9,15 +8,15 @@ class QuestionController {
 
     // 질문 추가
     async createQuestion(req, res) {
-        const { title, content, user_id } = req.body;
+        const { question_text, user_name } = req.body;
 
-        if (!title || !content || !user_id) {
-            return res.status(400).json({ message: '제목, 내용, 사용자 ID를 입력하세요.' });
+        if (!question_text || !user_name) {
+            return res.status(400).json({ message: '질문 내용과 사용자 이름을 입력하세요.' });
         }
 
         try {
             // 질문 추가
-            await this.questionModel.createQuestion(title, content, user_id);
+            await this.questionModel.createQuestion(question_text, user_name);
             res.status(201).json({ message: '질문이 추가되었습니다.' });
         } catch (err) {
             console.error('DB 오류:', err);
