@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const Database = require('./db/database'); // DB 객체 임포트
 const UserRouter = require('./routes/user_router'); // UserRouter 임포트
+const PostingRouter = require('./routes/posting_router'); // PostingRouter 임포트
 
 class Server {
     constructor() {
@@ -21,6 +22,9 @@ class Server {
 
         const userRouter = new UserRouter(this.db); // UserRouter 인스턴스 생성
         this.app.use('/', userRouter.getRouter()); // 라우터 등록
+
+        const postingRouter = new PostingRouter(this.db);
+        this.app.use('/', postingRouter.getRouter());
 
         // 다른 라우터들도 추가 가능
         // const postingRouter = new PostingRouter(this.db);

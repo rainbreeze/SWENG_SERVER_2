@@ -1,24 +1,28 @@
+// routes/posting_router.js
 const express = require('express');
-const postingController = require('../controllers/posting_controller');  // 컨트롤러 임포트
+const PostingController = require('../controllers/posting_controller'); // 게시글 컨트롤러 임포트
 
-const postingRouter = express.Router();  // 라우터 객체 생성
+class PostingRouter {
+    constructor(db) {
+        this.router = express.Router();
+        this.postingController = new PostingController(db); // DB 객체를 주입하여 PostingController 생성
+        this.initializeRoutes();
+    }
 
-// 게시글 추가
-postingRouter.post('/postings', postingController.createPosting);
+    // 라우트 초기화
+    initializeRoutes() {
+        this.router.post('/postings', (req, res) => this.postingController.createPosting(req, res));
+        this.router.get('/postings', (req, res) => this.postingController.getPostings(req, res));
+        this.router.get('/postings/:id', (req, res) => this.postingController.getPostingById(req, res));
+        this.router.post('/postings/:id/like', (req, res) => this.postingController.likePosting(req, res));
+        this.router.post('/postings/:id/comment', (req, res) => this.postingController.addCommentToPosting(req, res));
+        this.router.delete('/postings/:id', (req, res) => this.postingController.deletePosting(req, res));
+    }
 
-// 게시글 목록 조회
-postingRouter.get('/postings', postingController.getPostings);
+    // 라우터 반환
+    getRouter() {
+        return this.router;
+    }
+}
 
-// 특정 게시글 조회
-postingRouter.get('/postings/:id', postingController.getPostingById);
-
-// 게시글 삭제
-postingRouter.delete('/postings/:id', postingController.deletePosting);  // 삭제 기능 추가
-
-// 좋아요 수 증가
-postingRouter.post('/postings/:id/like', postingController.likePosting);
-
-// 댓글 수 증가
-postingRouter.post('/postings/:id/comment', postingController.addCommentToPosting);
-
-module.exports = postingRouter;  // 라우터 내보냄
+module.exports = PostingRouter;
