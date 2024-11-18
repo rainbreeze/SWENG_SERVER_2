@@ -83,26 +83,29 @@ class PostingController {
         const { id } = req.params;
         console.log('삭제할 게시글 ID:', id);  // ID 값 확인
         const { username } = req.body;
-        console.log(username);
+        console.log('요청한 사용자 이름:', username);  // 사용자 이름 확인
 
         try {
             const posting = await this.postingModel.getById(id);
             console.log('게시글 조회 결과:', posting);  // 게시글 정보 출력
+
             if (posting.length === 0) {
                 return res.status(404).json({ message: '게시글을 찾을 수 없습니다.' });
             }
 
             const author = posting[0].author;
-
+            console.log('글쓴이:', author);  // 글쓴이 정보 출력
             if (username !== author) {
                 return res.status(403).json({ message: '게시글을 삭제할 권한이 없습니다.' });
             }
 
-            // 댓글 삭제
-            await this.commentModel.deleteCommentsByPostingId(id);
+            // 댓글 삭제 (디버깅 로그 추가)
+            const deleteCommentsResult = await this.commentModel.deleteCommentsByPostingId(id);
+            console.log('댓글 삭제 결과:', deleteCommentsResult);  // 댓글 삭제 결과 확인
 
             // 게시글 삭제
             const result = await this.postingModel.deleteById(id);
+            console.log('게시글 삭제 결과:', result);  // 게시글 삭제 결과 확인
 
             if (result.affectedRows === 0) {
                 return res.status(404).json({ message: '게시글을 찾을 수 없습니다.' });
@@ -114,6 +117,7 @@ class PostingController {
             res.status(500).json({ message: '서버 오류' });
         }
     }
+
 }
 
 module.exports = PostingController;
