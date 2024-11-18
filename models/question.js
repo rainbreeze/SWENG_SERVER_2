@@ -23,6 +23,13 @@ class Question {
         const result = await this.db.query(query, [question_id]);
         return result;
     }
+
+    // 특정 질문 삭제
+    async deleteQuestion(id) {
+        const query = 'DELETE FROM Questions WHERE id = ?';
+        const result = await this.db.query(query, [id]);
+        return result;
+    }
 }
 
 module.exports = Question;
