@@ -1,5 +1,3 @@
-const db = require('../db/database'); // DB 연결 객체 임포트
-
 class CommentModel {
     constructor(db) {
         this.db = db; // DB 객체 주입

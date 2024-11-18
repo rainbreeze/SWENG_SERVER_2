@@ -80,10 +80,12 @@ class PostingController {
     // 게시글 삭제
     async deletePosting(req, res) {
         const { id } = req.params;
+        console.log('삭제할 게시글 ID:', id);  // ID 값 확인
         const { username } = req.body;
 
         try {
             const posting = await this.postingModel.getById(id);
+            console.log('게시글 조회 결과:', posting);  // 게시글 정보 출력
             if (posting.length === 0) {
                 return res.status(404).json({ message: '게시글을 찾을 수 없습니다.' });
             }
