@@ -1,11 +1,11 @@
 // controllers/posting_controller.js
 const Posting = require('../models/posting'); // 게시글 모델 임포트
-const Comment = require('../models/comment'); // 댓글 모델 임포트
+const CommentController = require('./comment_controller'); // 댓글 컨트롤러 임포트
 
 class PostingController {
     constructor(db) {
         this.postingModel = new Posting(db); // DB 객체를 전달하여 Posting 모델 생성
-        this.commentModel = new Comment(db);  // 댓글 모델 인스턴스 생성
+        this.commentController = new CommentController(db);  // 댓글 컨트롤러 인스턴스 생성
     }
 
     // 게시글 추가
@@ -99,9 +99,8 @@ class PostingController {
                 return res.status(403).json({ message: '게시글을 삭제할 권한이 없습니다.' });
             }
 
-            // 댓글 삭제 (디버깅 로그 추가)
-            const deleteCommentsResult = await this.commentModel.deleteCommentsByPostingId(id);
-            console.log('댓글 삭제 결과:', deleteCommentsResult);  // 댓글 삭제 결과 확인
+            // 댓글 삭제를 CommentController로 위임
+            await this.commentController.deleteCommentsByPostingId(req, res);
 
             // 게시글 삭제
             const result = await this.postingModel.deleteById(id);

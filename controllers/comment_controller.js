@@ -70,6 +70,21 @@ class CommentController {
             res.status(500).json({ message: '서버 오류' });
         }
     }
+
+        // 게시글의 모든 댓글 삭제
+        async deleteCommentsByPostingId(req, res) {
+            const { postingId } = req.params;
+            console.log('댓글 삭제 시작:', postingId);  // 디버깅 로그
+    
+            try {
+                const result = await this.commentModel.deleteCommentsByPostingId(postingId);
+                console.log('댓글 삭제 결과:', result);  // 댓글 삭제 결과 확인
+                res.status(200).json({ message: '댓글이 모두 삭제되었습니다.' });
+            } catch (err) {
+                console.error('댓글 삭제 오류:', err);
+                res.status(500).json({ message: '댓글 삭제 오류' });
+            }
+        }
 }
 
 module.exports = CommentController;
