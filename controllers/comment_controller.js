@@ -18,7 +18,7 @@ class CommentController {
         try {
             // 댓글 추가
             await this.commentModel.addComment(postId, commentor, comment);
-            
+
             // 댓글 추가 후, 게시글의 댓글 수를 업데이트
             await this.updateCommentCount(postId);  // 댓글 수 증가
 
@@ -52,7 +52,8 @@ class CommentController {
     // 댓글 삭제
     async deleteComment(req, res) {
         const { postId, commentId } = req.params;
-
+        // 디버깅을 위한 로그 추가
+        console.log('req.params:', req.params);  // req.params가 제대로 전달되는지 확인
         try {
             // 댓글 삭제
             const result = await this.commentModel.deleteComment(postId, commentId);
@@ -71,23 +72,25 @@ class CommentController {
         }
     }
 
-    // 게시글의 댓글 수 업데이트
     async updateCommentCount(postId) {
         try {
-            // 댓글 수를 카운트해서 업데이트하는 쿼리 실행
+            // 댓글 수를 카운트
             const commentCount = await this.commentModel.countComments(postId);
+    
+            // 댓글 수 업데이트
             await this.commentModel.updateCommentCount(postId, commentCount);
         } catch (err) {
             console.error('댓글 수 업데이트 오류:', err);
             throw new Error('댓글 수 업데이트 오류');
         }
     }
+    
 
     // 게시글의 모든 댓글 삭제
     async deleteCommentsByPostingId(req, res) {
         const { postingId } = req.params;
         console.log('댓글 삭제 시작:', postingId);  // 디버깅 로그
-    
+
         try {
             const result = await this.commentModel.deleteCommentsByPostingId(postingId);
             console.log('댓글 삭제 결과:', result);  // 댓글 삭제 결과 확인

@@ -29,11 +29,23 @@ class Comment {
         }
     }
 
-    // 댓글 수 업데이트 (게시글의 댓글 수)
-    async updateCommentCount(postId) {
-        const sql = 'UPDATE posting SET comment_num = (SELECT COUNT(*) FROM comments WHERE posting_id = ?) WHERE id = ?';
-        const params = [postId, postId];
+    async countComments(postId) {
+        const sql = 'SELECT COUNT(*) AS count FROM comments WHERE posting_id = ?';
+        const params = [postId];
+    
+        try {
+            const result = await this.db.query(sql, params);
+            return result[0].count;  // 첫 번째 결과의 count 값을 반환
+        } catch (err) {
+            throw new Error('댓글 수 조회 오류: ' + err);
+        }
+    }
 
+    // 댓글 수 업데이트 (게시글의 댓글 수)
+    async updateCommentCount(postId, commentCount) {
+        const sql = 'UPDATE posting SET comment_num = ? WHERE id = ?';
+        const params = [commentCount, postId];
+    
         try {
             const result = await this.db.query(sql, params);
             return result;
@@ -41,7 +53,7 @@ class Comment {
             throw new Error('댓글 수 업데이트 오류: ' + err);
         }
     }
-
+    
 // controllers/comment_controller.js
 async deleteComment(req, res) {
     const { postId, commentId } = req.params;
