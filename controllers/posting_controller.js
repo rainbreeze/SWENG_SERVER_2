@@ -82,6 +82,7 @@ class PostingController {
         const { id } = req.params;
         console.log('삭제할 게시글 ID:', id);  // ID 값 확인
         const { username } = req.body;
+        console.log(username);
 
         try {
             const posting = await this.postingModel.getById(id);
