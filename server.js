@@ -1,10 +1,10 @@
-// server.js
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const Database = require('./db/database'); // DB 객체 임포트
 const UserRouter = require('./routes/user_router'); // UserRouter 임포트
 const PostingRouter = require('./routes/posting_router'); // PostingRouter 임포트
+const CommentRouter = require('./routes/comment_router'); // CommentRouter 임포트
 
 class Server {
     constructor() {
@@ -21,14 +21,13 @@ class Server {
         this.app.use(cors());  // CORS 설정
 
         const userRouter = new UserRouter(this.db); // UserRouter 인스턴스 생성
-        this.app.use('/', userRouter.getRouter()); // 라우터 등록
+        this.app.use('/users', userRouter.getRouter()); // "/users" 경로로 라우터 등록
 
         const postingRouter = new PostingRouter(this.db);
-        this.app.use('/', postingRouter.getRouter());
+        this.app.use('/postings', postingRouter.getRouter()); // "/postings" 경로로 라우터 등록
 
-        // 다른 라우터들도 추가 가능
-        // const postingRouter = new PostingRouter(this.db);
-        // this.app.use('/', postingRouter.getRouter());
+        const commentRouter = new CommentRouter(this.db);
+        this.app.use('/comments', commentRouter.getRouter()); // "/comments" 경로로 라우터 등록
     }
 
     // 서버 실행
