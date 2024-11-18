@@ -1,3 +1,4 @@
+// server.js
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
@@ -21,13 +22,13 @@ class Server {
         this.app.use(cors());  // CORS 설정
 
         const userRouter = new UserRouter(this.db); // UserRouter 인스턴스 생성
-        this.app.use('/users', userRouter.getRouter()); // "/users" 경로로 라우터 등록
+        this.app.use('/', userRouter.getRouter()); // 라우터 등록
 
         const postingRouter = new PostingRouter(this.db);
-        this.app.use('/postings', postingRouter.getRouter()); // "/postings" 경로로 라우터 등록
+        this.app.use('/', postingRouter.getRouter());
 
         const commentRouter = new CommentRouter(this.db);
-        this.app.use('/comments', commentRouter.getRouter()); // "/comments" 경로로 라우터 등록
+        this.app.use('/', commentRouter.getRouter()); // "/comments" 경로로 라우터 등록
     }
 
     // 서버 실행
