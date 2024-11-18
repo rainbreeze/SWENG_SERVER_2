@@ -1,8 +1,10 @@
 const CommentModel = require('../models/comment'); // 댓글 모델 임포트
+const PostingController = require('./posting_controller'); // 게시글 컨트롤러 임포트
 
 class CommentController {
     constructor(db) {
         this.commentModel = new CommentModel(db); // DB 객체를 주입하여 댓글 모델 인스턴스 생성
+        this.postingController = new PostingController(db); // PostingController 인스턴스
     }
 
     // 댓글 추가
@@ -19,8 +21,8 @@ class CommentController {
             // 댓글 추가
             await this.commentModel.addComment(postId, commentor, comment);
             
-            // 게시글의 댓글 수 업데이트
-            await this.commentModel.updateCommentCount(postId);
+            // 댓글 추가 후, 게시글의 댓글 수를 업데이트
+            await this.postingController.addCommentToPosting(postId);  // 댓글 수 증가
 
             res.status(201).json({ message: '댓글이 성공적으로 추가되었습니다.' });
         } catch (err) {
