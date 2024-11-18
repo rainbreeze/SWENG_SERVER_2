@@ -63,19 +63,23 @@ class CommentModel {
         });
     }
 
-    // 게시글의 모든 댓글 삭제
     deleteCommentsByPostingId(postingId) {
         return new Promise((resolve, reject) => {
             this.db.query(
                 'DELETE FROM comments WHERE posting_id = ?',
                 [postingId],
                 (err, result) => {
-                    if (err) return reject(err);
-                    resolve(result);
+                    if (err) {
+                        console.error('댓글 삭제 오류:', err);  // 에러 로그 추가
+                        return reject(err);  // 에러 발생 시 reject 호출
+                    }
+                    console.log('삭제된 댓글 수:', result.affectedRows);  // 정상적으로 삭제된 댓글 수 출력
+                    resolve(result);  // 성공적으로 삭제되면 resolve 호출
                 }
             );
         });
     }
+    
 }
 
 module.exports = CommentModel;
