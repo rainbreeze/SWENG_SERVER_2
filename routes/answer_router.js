@@ -13,6 +13,7 @@ class AnswerRouter {
     initializeRoutes() {
         this.router.post('/answers', (req, res) => this.answerController.createAnswer(req, res)); // 답변 추가
         this.router.get('/answers/:question_id', (req, res) => this.answerController.getAnswersByQuestionId(req, res)); // 특정 질문에 대한 답변 조회
+        this.router.delete('/answers/:answer_id', (req, res) => this.answerController.deleteAnswer(req, res)); // 답변 삭제
     }
 
     getRouter() {

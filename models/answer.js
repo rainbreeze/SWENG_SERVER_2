@@ -16,6 +16,13 @@ class Answer {
         const result = await this.db.query(query, [question_id]);
         return result;
     }
+
+    // 답변 삭제
+    async deleteAnswer(answer_id) {
+        const query = 'DELETE FROM Answers WHERE id = ?';
+        const result = await this.db.query(query, [answer_id]);
+        return result;
+    }
 }
 
 module.exports = Answer;
