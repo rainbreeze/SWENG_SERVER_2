@@ -57,12 +57,12 @@ class Comment {
     // controllers/comment_controller.js
     async deleteComment(req, res) {
         const { postId, commentId } = req.params;
+        console.log('req.params:', req.params); 
 
         try {
             // 댓글 삭제
-            const result = await this.commentModel.deleteComment(postId, commentId);
-            console.log('req.params:', req.params);  // 디버깅을 위한 출력
-            
+            const result = await this.commentModel.deleteComment(postId, commentId); // 디버깅을 위한 출력
+
             if (result.affectedRows === 0) {
                 return res.status(404).json({ message: '해당 댓글을 찾을 수 없습니다.' });
             }
