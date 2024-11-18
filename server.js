@@ -7,6 +7,8 @@ const UserRouter = require('./routes/user_router'); // UserRouter 임포트
 const PostingRouter = require('./routes/posting_router'); // PostingRouter 임포트
 const CommentRouter = require('./routes/comment_router'); // CommentRouter 임포트
 const MemoRouter = require('./routes/memo_router'); // MemoRouter 임포트
+const QuestionRouter = require('./routes/question_router'); // QuestionRouter 임포트
+const AnswerRouter = require('./routes/answer_router'); // AnswerRouter 임포트
 
 class Server {
     constructor() {
@@ -33,6 +35,14 @@ class Server {
 
         const memoRouter = new MemoRouter(this.db); // MemoRouter 인스턴스 생성
         this.app.use('/', memoRouter.getRouter()); // "/memos" 경로로 라우터 등록
+
+        // 질문 관련 라우터 등록
+        const questionRouter = new QuestionRouter(this.db);
+        this.app.use('/', questionRouter.getRouter());
+
+        // 답변 관련 라우터 등록
+        const answerRouter = new AnswerRouter(this.db);
+        this.app.use('/', answerRouter.getRouter());
     }
 
     // 서버 실행
