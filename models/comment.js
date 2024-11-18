@@ -65,21 +65,23 @@ class CommentModel {
 
     deleteCommentsByPostingId(postingId) {
         return new Promise((resolve, reject) => {
+            console.log('댓글 삭제 시작:', postingId);  // 로그 추가
+    
             this.db.query(
                 'DELETE FROM comments WHERE posting_id = ?',
                 [postingId],
                 (err, result) => {
                     if (err) {
                         console.error('댓글 삭제 오류:', err);  // 에러 로그 추가
-                        return reject(err);  // 에러 발생 시 reject 호출
+                        return reject(err);
                     }
-                    console.log('삭제된 댓글 수:', result.affectedRows);  // 정상적으로 삭제된 댓글 수 출력
-                    resolve(result);  // 성공적으로 삭제되면 resolve 호출
+    
+                    console.log('댓글 삭제 완료:', result);  // 정상 삭제 완료 시 로그 추가
+                    resolve(result);
                 }
             );
         });
     }
-    
 }
 
 module.exports = CommentModel;
