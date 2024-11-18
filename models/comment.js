@@ -1,3 +1,4 @@
+// models/comment.js
 class Comment {
     constructor(db) {
         this.db = db; // DB 객체 주입
@@ -29,6 +30,7 @@ class Comment {
         }
     }
 
+    // 댓글 수 조회
     async countComments(postId) {
         const sql = 'SELECT COUNT(*) AS count FROM comments WHERE posting_id = ?';
         const params = [postId];
@@ -54,48 +56,28 @@ class Comment {
         }
     }
 
-    // controllers/comment_controller.js
-    async deleteComment(req, res) {
-        const { postId, commentId } = req.params;
-        console.log('req.params:', req.params); 
+    // 댓글 삭제
+    async deleteComment(postId, commentId) {
+        const sql = 'DELETE FROM comments WHERE posting_id = ? AND id = ?';
+        const params = [postId, commentId];
 
         try {
-            // 댓글 삭제
-            const result = await this.commentModel.deleteComment(postId, commentId); // 디버깅을 위한 출력
-
-            if (result.affectedRows === 0) {
-                return res.status(404).json({ message: '해당 댓글을 찾을 수 없습니다.' });
-            }
-
-            // 댓글 수 업데이트
-            const updateResult = await this.updateCommentCount(postId);
-
-            if (updateResult.affectedRows === 0) {
-                console.error('댓글 수 업데이트 실패');
-                return res.status(500).json({ message: '댓글 수 업데이트 실패' });
-            }
-
-            res.status(200).json({ message: '댓글이 성공적으로 삭제되었습니다.' });
+            const result = await this.db.query(sql, params);
+            return result;
         } catch (err) {
-            console.error('댓글 삭제 오류:', err);
-            res.status(500).json({ message: '서버 오류' });
+            throw new Error('댓글 삭제 오류: ' + err);
         }
     }
 
-
     // 게시글의 모든 댓글 삭제
     async deleteCommentsByPostingId(postingId) {
-        console.log('댓글 삭제 시작:', postingId);  // 로그 추가
-
         const sql = 'DELETE FROM comments WHERE posting_id = ?';
         const params = [postingId];
 
         try {
             const result = await this.db.query(sql, params);
-            console.log('댓글 삭제 완료:', result);  // 정상 삭제 완료 시 로그 추가
             return result;
         } catch (err) {
-            console.error('댓글 삭제 오류:', err);  // 에러 로그 추가
             throw new Error('댓글 삭제 오류: ' + err);
         }
     }
