@@ -6,6 +6,7 @@ const Database = require('./db/database'); // DB 객체 임포트
 const UserRouter = require('./routes/user_router'); // UserRouter 임포트
 const PostingRouter = require('./routes/posting_router'); // PostingRouter 임포트
 const CommentRouter = require('./routes/comment_router'); // CommentRouter 임포트
+const MemoRouter = require('./routes/memo_router'); // MemoRouter 임포트
 
 class Server {
     constructor() {
@@ -29,6 +30,9 @@ class Server {
 
         const commentRouter = new CommentRouter(this.db);
         this.app.use('/', commentRouter.getRouter()); // "/comments" 경로로 라우터 등록
+
+        const memoRouter = new MemoRouter(this.db); // MemoRouter 인스턴스 생성
+        this.app.use('/', memoRouter.getRouter()); // "/memos" 경로로 라우터 등록
     }
 
     // 서버 실행
