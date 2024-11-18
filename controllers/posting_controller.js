@@ -5,6 +5,7 @@ const Comment = require('../models/comment'); // 댓글 모델 임포트
 class PostingController {
     constructor(db) {
         this.postingModel = new Posting(db); // DB 객체를 전달하여 Posting 모델 생성
+        this.commentModel = new Comment(db);  // 댓글 모델 인스턴스 생성
     }
 
     // 게시글 추가
@@ -98,7 +99,7 @@ class PostingController {
             }
 
             // 댓글 삭제
-            await Comment.deleteCommentsByPostingId(id);  // 게시글에 달린 모든 댓글 삭제
+            await this.commentModel.deleteCommentsByPostingId(id);
 
             // 게시글 삭제
             const result = await this.postingModel.deleteById(id);
