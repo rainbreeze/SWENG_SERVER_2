@@ -1,13 +1,24 @@
-// routes.js
+// routes/user_router.js
 const express = require('express');
-const userController = require('../controllers/user_controller');  // 컨트롤러 임포트
+const UserController = require('../controllers/user_controller'); // UserController 임포트
 
-const userRouter = express.Router();  // 라우터 객체 생성
+class UserRouter {
+    constructor(db) {
+        this.db = db; // DB 객체 주입
+        this.userController = new UserController(db); // UserController 인스턴스 생성
+        this.router = express.Router();
+        this.initializeRoutes();
+    }
 
-// 회원가입 라우트
-userRouter.post('/register', userController.registerUser);
+    // 라우트 초기화
+    initializeRoutes() {
+        this.router.post('/register', (req, res) => this.userController.registerUser(req, res));
+        this.router.post('/login', (req, res) => this.userController.loginUser(req, res));
+    }
 
-// 로그인 라우트
-userRouter.post('/login', userController.loginUser);
+    getRouter() {
+        return this.router;
+    }
+}
 
-module.exports = userRouter;  // 라우터 내보냄
+module.exports = UserRouter;

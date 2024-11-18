@@ -1,20 +1,36 @@
-// db.js
+// db/database.js
 const mysql = require('mysql2');
-require('dotenv').config();  // .env 파일 로드
+require('dotenv').config();
 
-// MySQL 연결 설정
-const db = mysql.createConnection({
-    uri: process.env.MYSQL_PUBLIC_URL, // 공용 URL을 사용
-});
-
-// MySQL 연결 확인
-db.connect((err) => {
-    if (err) {
-        console.error('MySQL 연결 오류:', err);
-        return;
+class Database {
+    constructor() {
+        this.db = mysql.createConnection({
+            uri: process.env.MYSQL_PUBLIC_URL, // 공용 URL을 사용
+        });
     }
-    console.log('MySQL에 연결되었습니다.');
-});
 
-// db 객체를 다른 파일에서 사용할 수 있도록 내보냄
-module.exports = db;
+    // MySQL 연결
+    connect() {
+        return new Promise((resolve, reject) => {
+            this.db.connect((err) => {
+                if (err) {
+                    reject('MySQL 연결 오류: ' + err);
+                } else {
+                    resolve('MySQL에 연결되었습니다.');
+                }
+            });
+        });
+    }
+
+    // 쿼리 실행
+    query(sql, params) {
+        return new Promise((resolve, reject) => {
+            this.db.query(sql, params, (err, results) => {
+                if (err) reject(err);
+                resolve(results);
+            });
+        });
+    }
+}
+
+module.exports = Database;
