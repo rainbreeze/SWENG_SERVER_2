@@ -1,5 +1,4 @@
 // controllers/posting_controller.js
-
 const Posting = require('../models/posting'); // 게시글 모델 임포트
 const CommentController = require('./comment_controller'); // 댓글 컨트롤러 임포트
 
@@ -49,6 +48,19 @@ class PostingController {
             res.status(200).json(posting[0]);
         } catch (err) {
             console.error('게시글 조회 오류:', err);
+            res.status(500).json({ message: '서버 오류' });
+        }
+    }
+
+    // 좋아요 수 증가
+    async likePosting(req, res) {
+        const { id } = req.params;
+
+        try {
+            await this.postingModel.updateGood(id);
+            res.status(200).json({ message: '좋아요 수가 증가했습니다.' });
+        } catch (err) {
+            console.error('좋아요 증가 오류:', err);
             res.status(500).json({ message: '서버 오류' });
         }
     }
