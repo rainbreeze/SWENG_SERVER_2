@@ -1,5 +1,5 @@
 const Question = require('../models/question'); // Question 모델 임포트
-const AnswerController = require('./answerController'); // AnswerController 임포트
+const AnswerController = require('./answer_controller'); // AnswerController 임포트
 
 class QuestionController {
     constructor(db) {
