@@ -1,3 +1,4 @@
+const Answer = require('../models/answer'); // 댓글 모델 임포트
 class AnswerController {
     constructor(db) {
         this.db = db; // DB 연결 객체 주입
