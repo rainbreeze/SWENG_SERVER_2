@@ -27,7 +27,7 @@ class Server {
         this.app.use('/users', userRouter.getRouter()); // "/users" 경로로 라우터 등록
 
         const postingRouter = new PostingRouter(this.db);
-        this.app.use('/posts', postingRouter.getRouter()); // "/posts" 경로로 라우터 등록
+        this.app.use('/postings', postingRouter.getRouter()); // "/posts" 경로로 라우터 등록
 
         const commentRouter = new CommentRouter(this.db);
         this.app.use('/comments', commentRouter.getRouter()); // "/comments" 경로로 라우터 등록
