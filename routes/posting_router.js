@@ -22,7 +22,7 @@ class PostingRouter {
 
     // 라우터 반환
     getRouter() {
-        return this.router;
+        return this._router;
     }
 }
 
