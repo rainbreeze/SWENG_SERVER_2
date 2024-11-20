@@ -14,6 +14,14 @@ class Server {
         this.app = express();
         this.port = 3000;
         this.db = new Database(); // DB 연결 객체 생성
+
+        // 라우터들을 클래스의 인스턴스 변수로 설정
+        this.userRouter = new UserRouter(this.db);
+        this.postingRouter = new PostingRouter(this.db);
+        this.commentRouter = new CommentRouter(this.db);
+        this.memoRouter = new MemoRouter(this.db);
+        this.questionRouter = new QuestionRouter(this.db);
+        this.answerRouter = new AnswerRouter(this.db);
     }
 
     // 서버 설정
@@ -23,23 +31,13 @@ class Server {
         this.app.use(express.json());  // 요청 본문을 JSON으로 파싱
         this.app.use(cors());  // CORS 설정
 
-        const userRouter = new UserRouter(this.db); // UserRouter 인스턴스 생성
-        this.app.use('/users', userRouter.getRouter()); // "/users" 경로로 라우터 등록
-
-        const postingRouter = new PostingRouter(this.db);
-        this.app.use('/postings', postingRouter.getRouter()); // "/posts" 경로로 라우터 등록
-
-        const commentRouter = new CommentRouter(this.db);
-        this.app.use('/comments', commentRouter.getRouter()); // "/comments" 경로로 라우터 등록
-
-        const memoRouter = new MemoRouter(this.db); // MemoRouter 인스턴스 생성
-        this.app.use('/memos', memoRouter.getRouter()); // "/memos" 경로로 라우터 등록
-
-        const questionRouter = new QuestionRouter(this.db);
-        this.app.use('/questions', questionRouter.getRouter()); // "/questions" 경로로 라우터 등록
-
-        const answerRouter = new AnswerRouter(this.db);
-        this.app.use('/answers', answerRouter.getRouter()); // "/answers" 경로로 라우터 등록
+        // 인스턴스 변수로 접근
+        this.app.use('/users', this.userRouter.getRouter()); // "/users" 경로로 라우터 등록
+        this.app.use('/postings', this.postingRouter.getRouter()); // "/posts" 경로로 라우터 등록
+        this.app.use('/comments', this.commentRouter.getRouter()); // "/comments" 경로로 라우터 등록
+        this.app.use('/memos', this.memoRouter.getRouter()); // "/memos" 경로로 라우터 등록
+        this.app.use('/questions', this.questionRouter.getRouter()); // "/questions" 경로로 라우터 등록
+        this.app.use('/answers', this.answerRouter.getRouter()); // "/answers" 경로로 라우터 등록
     }
 
     // 서버 실행
