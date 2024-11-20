@@ -4,6 +4,7 @@ const PostingController = require('../controllers/posting_controller'); // 게�
 
 class PostingRouter {
     constructor(db) {
+        this.db = db; 
         this._router = express.Router();
         this.postingController = new PostingController(db); // DB 객체를 주입하여 PostingController 생성
         this.initializeRoutes();
