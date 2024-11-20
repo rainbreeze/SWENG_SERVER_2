@@ -11,12 +11,12 @@ class PostingRouter {
 
     // 라우트 초기화
     initializeRoutes() {
-        this.router.post('/postings', (req, res) => this.postingController.createPosting(req, res));
-        this.router.get('/postings', (req, res) => this.postingController.getPostings(req, res));
-        this.router.get('/postings/:id', (req, res) => this.postingController.getPostingById(req, res));
-        this.router.post('/postings/:id/like', (req, res) => this.postingController.likePosting(req, res));
-        this.router.post('/postings/:id/comment', (req, res) => this.postingController.addCommentToPosting(req, res));
-        this.router.delete('/postings/:id', (req, res) => this.postingController.deletePosting(req, res));
+        this.router.post('/', (req, res) => this.postingController.createPosting(req, res)); // 게시글 추가
+        this.router.get('/', (req, res) => this.postingController.getPostings(req, res)); // 모든 게시글 조회
+        this.router.get('/:id', (req, res) => this.postingController.getPostingById(req, res)); // 특정 게시글 조회
+        this.router.post('/:id/like', (req, res) => this.postingController.likePosting(req, res)); // 게시글 좋아요
+        this.router.post('/:id/comment', (req, res) => this.postingController.addCommentToPosting(req, res)); // 게시글 댓글
+        this.router.delete('/:id', (req, res) => this.postingController.deletePosting(req, res));  // 게시글 삭제
     }
 
     // 라우터 반환

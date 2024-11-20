@@ -12,11 +12,11 @@ class MemoRouter {
 
     // 라우트 초기화
     initializeRoutes() {
-        this.router.post('/memos', (req, res) => this.memoController.createMemo(req, res));  // 메모 추가
-        this.router.get('/memos', (req, res) => this.memoController.getAllMemos(req, res));  // 모든 메모 조회
-        this.router.get('/memos/:id', (req, res) => this.memoController.getMemo(req, res));  // 메모 조회 (ID로)
-        this.router.put('/memos/:id', (req, res) => this.memoController.updateMemo(req, res));  // 메모 수정
-        this.router.delete('/memos/:id', (req, res) => this.memoController.deleteMemo(req, res));  // 메모 삭제
+        this.router.post('/', (req, res) => this.memoController.createMemo(req, res));  // 메모 추가
+        this.router.get('/', (req, res) => this.memoController.getAllMemos(req, res));  // 모든 메모 조회
+        this.router.get('/:id', (req, res) => this.memoController.getMemo(req, res));  // 특정 메모 조회 (ID로)
+        this.router.put('/:id', (req, res) => this.memoController.updateMemo(req, res));  // 메모 수정
+        this.router.delete('/:id', (req, res) => this.memoController.deleteMemo(req, res));  // 메모 삭제
     }
 
     getRouter() {

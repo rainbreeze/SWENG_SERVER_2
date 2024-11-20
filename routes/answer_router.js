@@ -1,3 +1,4 @@
+// routes/answer_router.js
 const express = require('express');
 const AnswerController = require('../controllers/answer_controller'); // AnswerController 임포트
 
@@ -11,9 +12,9 @@ class AnswerRouter {
 
     // 라우트 초기화
     initializeRoutes() {
-        this.router.post('/answers', (req, res) => this.answerController.createAnswer(req, res)); // 답변 추가
-        this.router.get('/answers/:question_id', (req, res) => this.answerController.getAnswersByQuestionId(req, res)); // 특정 질문에 대한 답변 조회
-        this.router.delete('/answers/:answer_id', (req, res) => this.answerController.deleteAnswer(req, res)); // 답변 삭제
+        this.router.post('/', (req, res) => this.answerController.createAnswer(req, res)); // 답변 추가
+        this.router.get('/:question_id', (req, res) => this.answerController.getAnswersByQuestionId(req, res)); // 특정 질문에 대한 답변 조회
+        this.router.delete('/:answer_id', (req, res) => this.answerController.deleteAnswer(req, res)); // 답변 삭제
     }
 
     getRouter() {

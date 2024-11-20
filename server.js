@@ -1,4 +1,3 @@
-// server.js
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
@@ -25,24 +24,22 @@ class Server {
         this.app.use(cors());  // CORS 설정
 
         const userRouter = new UserRouter(this.db); // UserRouter 인스턴스 생성
-        this.app.use('/', userRouter.getRouter()); // 라우터 등록
+        this.app.use('/users', userRouter.getRouter()); // "/users" 경로로 라우터 등록
 
         const postingRouter = new PostingRouter(this.db);
-        this.app.use('/', postingRouter.getRouter());
+        this.app.use('/posts', postingRouter.getRouter()); // "/posts" 경로로 라우터 등록
 
         const commentRouter = new CommentRouter(this.db);
-        this.app.use('/', commentRouter.getRouter()); // "/comments" 경로로 라우터 등록
+        this.app.use('/comments', commentRouter.getRouter()); // "/comments" 경로로 라우터 등록
 
         const memoRouter = new MemoRouter(this.db); // MemoRouter 인스턴스 생성
-        this.app.use('/', memoRouter.getRouter()); // "/memos" 경로로 라우터 등록
+        this.app.use('/memos', memoRouter.getRouter()); // "/memos" 경로로 라우터 등록
 
-        // 질문 관련 라우터 등록
         const questionRouter = new QuestionRouter(this.db);
-        this.app.use('/', questionRouter.getRouter());
+        this.app.use('/questions', questionRouter.getRouter()); // "/questions" 경로로 라우터 등록
 
-        // 답변 관련 라우터 등록
         const answerRouter = new AnswerRouter(this.db);
-        this.app.use('/', answerRouter.getRouter());
+        this.app.use('/answers', answerRouter.getRouter()); // "/answers" 경로로 라우터 등록
     }
 
     // 서버 실행
